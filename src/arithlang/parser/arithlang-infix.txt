@@ -1,0 +1,28 @@
+Program ::= Exp
+
+Exp     ::= Exp + Term
+            | Exp - term
+            | Term
+
+Term    ::= Term * Neg
+            | Term / Neg
+            | Neg
+
+Neg     ::= ( - Pow )
+            | Pow
+
+Pow ::= Pow ^ Factor
+            | Factor
+
+Factor  ::= ( Exp )
+            | Number
+
+Number  ::= Digit
+            | DigitNotZero Digit+
+            | - Digit
+            | - DigitNotZero Digit+
+            | Number . Digit+
+
+Digit   ::= [0-9]
+
+DigitNotZero ::= [1-9]

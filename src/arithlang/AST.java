@@ -16,7 +16,7 @@ import arithlang.AST.Exp;
  */
 public interface AST {
 	public static abstract class ASTNode {
-		public abstract <T> T accept(Visitor<T> visitor);
+		public abstract <T> T accept(Visitor<T> visitor, Env env);
 	}
 	public static class Program extends ASTNode {
 		Exp _e;
@@ -29,12 +29,28 @@ public interface AST {
 			return _e;
 		}
 		
-		public <T> T accept(Visitor<T> visitor) {
-			return visitor.visit(this);
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
 		}
 	}
 	public static abstract class Exp extends ASTNode {
 
+	}
+
+	public static class VarExp extends Exp {
+		String _name;
+
+		public VarExp(String name) {
+			_name = name;
+		}
+
+		public String name() {
+			return _name;
+		}
+		
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
 	}
 
 	public static class NumExp extends Exp {
@@ -48,8 +64,8 @@ public interface AST {
 			return _val;
 		}
 		
-		public <T> T accept(Visitor<T> visitor) {
-			return visitor.visit(this);
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
 		}
 	}
 
@@ -68,8 +84,8 @@ public interface AST {
 		public AddExp(List<Exp> args) {
 			super(args);
 		}
-		public <T> T accept(Visitor<T> visitor) {
-			return visitor.visit(this);
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
 		}
 	}
 
@@ -77,8 +93,8 @@ public interface AST {
 		public SubExp(List<Exp> args) {
 			super(args);
 		}
-		public <T> T accept(Visitor<T> visitor) {
-			return visitor.visit(this);
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
 		}
 	}
 
@@ -86,8 +102,8 @@ public interface AST {
 		public DivExp(List<Exp> args) {
 			super(args);
 		}
-		public <T> T accept(Visitor<T> visitor) {
-			return visitor.visit(this);
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
 		}
 	}
 
@@ -95,8 +111,8 @@ public interface AST {
 		public MultExp(List<Exp> args) {
 			super(args);
 		}
-		public <T> T accept(Visitor<T> visitor) {
-			return visitor.visit(this);
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
 		}
 	}
 
@@ -104,8 +120,8 @@ public interface AST {
 		public PowExp(List<Exp> args) {
 			super(args);
 		}
-		public <T> T accept(Visitor<T> visitor) {
-			return visitor.visit(this);
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
 		}
 	}
 
@@ -120,20 +136,21 @@ public interface AST {
 			return e;
 		}
 
-		public <T> T accept(Visitor<T> visitor) {
-			return visitor.visit(this);
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
 		}
 	}
 		
 	public interface Visitor <T> {
 		// This interface should contain a signature for each concrete AST node.
-		public T visit(AST.NumExp e);
-		public T visit(AST.AddExp e);
-		public T visit(AST.SubExp e);
-		public T visit(AST.MultExp e);
-		public T visit(AST.DivExp e);
-		public T visit(AST.PowExp e);
-		public T visit(AST.NegExp e);
-		public T visit(AST.Program p);
+		public T visit(AST.NumExp e, Env env);
+		public T visit(AST.AddExp e, Env env);
+		public T visit(AST.SubExp e, Env env);
+		public T visit(AST.MultExp e, Env env);
+		public T visit(AST.DivExp e, Env env);
+		public T visit(AST.PowExp e, Env env);
+		public T visit(AST.NegExp e, Env env);
+		public T visit(AST.Program p, Env env);
+		public T visit(AST.VarExp e, Env env);
 	}	
 }

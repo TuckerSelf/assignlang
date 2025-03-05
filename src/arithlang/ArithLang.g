@@ -45,7 +45,8 @@ grammar ArithLang;
         | d=divexp { $ast = $d.ast; }
 			| p=powexp { $ast = $p.ast; }
 			| neg=negexp { $ast = $neg.ast; }
-			| in=infixadd { $ast = $in.ast;}
+			| v=varexp { $ast = $v.ast; }
+			| l=asgexp { $ast = $l.ast; }
         ;
  
  // The actions { $ast = $n.ast; } means that this rule passed through 
@@ -84,12 +85,14 @@ grammar ArithLang;
 // The rule above in its full form, where actions are enclosed in { }
 // 
  addexp returns [AddExp ast]
-        locals [ArrayList<Exp> list]
- 		@init { $list = new ArrayList<Exp>(); } :
- 		'(' '+'
- 		    e=exp { $list.add($e.ast); } 
- 		    ( e=exp { $list.add($e.ast); } )+
- 		')' { $ast = new AddExp($list); }
+        locals [ArrayList<Exp> list]:
+	l=addexp '+' r=exp { 
+                            $list = new ArrayList<Exp>();
+							$list.add($l.ast);
+							$list.add($r.ast);
+							$ast = new AddExp($list);		 
+	                     }
+	| n=numexp {$ast = $n.ast;}
  		;
 
 //
@@ -101,100 +104,65 @@ grammar ArithLang;
 // 
  
  subexp returns [SubExp ast]  
-        locals [ArrayList<Exp> list]
- 		@init { $list = new ArrayList<Exp>(); } :
- 		'(' '-'
- 		    e=exp { $list.add($e.ast); } 
- 		    ( e=exp { $list.add($e.ast); } )+ 
- 		')' { $ast = new SubExp($list); }
- 		;
-
- multexp returns [MultExp ast] 
-        locals [ArrayList<Exp> list]
- 		@init { $list = new ArrayList<Exp>(); } :
- 		'(' '*'
- 		    e=exp { $list.add($e.ast); } 
- 		    ( e=exp { $list.add($e.ast); } )+ 
- 		')' { $ast = new MultExp($list); }
- 		;
- 
- divexp returns [DivExp ast] 
-        locals [ArrayList<Exp> list]
- 		@init { $list = new ArrayList<Exp>(); } :
- 		'(' '/'
- 		    e=exp { $list.add($e.ast); } 
- 		    ( e=exp { $list.add($e.ast); } )+ 
- 		')' { $ast = new DivExp($list); }
- 		;
-
- powexp returns [PowExp ast]
-		locals [ArrayList<Exp> list]
-		@init { $list = new ArrayList<Exp>(); } :
-		'(' '^'
-			e=exp { $list.add($e.ast);}
-			( e=exp { $list.add($e.ast);})+
-		')' { $ast = new PowExp($list); }
-		;
-
- negexp returns [NegExp ast]:
-		'(' '-' e=exp ')' { $ast=new NegExp($e.ast); }
-		;
-
- infixadd returns [Exp ast]
-     locals [ArrayList<Exp> list]:
-	l=infixadd '+' r=exp { 
-                            $list = new ArrayList<Exp>();
-							$list.add($l.ast);
-							$list.add($r.ast);
-							$ast = new AddExp($list);		 
-	                     }
-	| n=numexp {$ast = $n.ast;}
-	      ;
-
- infixsub returns [Exp ast]
-     locals [ArrayList<Exp> list]:
-	l=infixsub '-' r=exp { 
+        locals [ArrayList<Exp> list]:
+	l=subexp '-' r=exp { 
                             $list = new ArrayList<Exp>();
 							$list.add($l.ast);
 							$list.add($r.ast);
 							$ast = new SubExp($list);		 
 	                     }
 	| n=numexp {$ast = $n.ast;}
-	      ;
+ 		;
 
- infixmult returns [Exp ast]
-     locals [ArrayList<Exp> list]:
-	l=infixmult '*' r=exp { 
+ multexp returns [MultExp ast] 
+         locals [ArrayList<Exp> list]:
+	l=multexp '*' r=exp { 
                             $list = new ArrayList<Exp>();
 							$list.add($l.ast);
 							$list.add($r.ast);
 							$ast = new MultExp($list);		 
 	                     }
 	| n=numexp {$ast = $n.ast;}
-	      ;
-
- infixdiv returns [Exp ast]
-     locals [ArrayList<Exp> list]:
-	l=infixdiv '/' r=exp { 
+ 		;
+ 
+ divexp returns [DivExp ast] 
+        locals [ArrayList<Exp> list]:
+	l=divexp '/' r=exp { 
                             $list = new ArrayList<Exp>();
 							$list.add($l.ast);
 							$list.add($r.ast);
 							$ast = new DivExp($list);		 
 	                     }
 	| n=numexp {$ast = $n.ast;}
-	      ;
+ 		;
 
- infixpow returns [Exp ast]
-     locals [ArrayList<Exp> list]:
-	l=infixpow '^' r=exp { 
+ powexp returns [PowExp ast]
+		locals [ArrayList<Exp> list]:
+	l=powexp '^' r=exp { 
                             $list = new ArrayList<Exp>();
 							$list.add($l.ast);
 							$list.add($r.ast);
 							$ast = new PowExp($list);		 
 	                     }
 	| n=numexp {$ast = $n.ast;}
-	      ;
+		;
 
+ negexp returns [NegExp ast]:
+		'(' '-' e=exp ')' { $ast=new NegExp($e.ast); }
+		;
+
+ varexp returns [VarExp ast]: 
+ 		id=Identifier { $ast = new VarExp($id.text); }
+ 		;
+
+ asgexp  returns [AsgExp ast] :
+	l=varexp '=' r=asgexp{
+		($l.ast);
+		($r.ast);
+		{$ast = new AsgExp();}
+	}
+	| n=exp {$ast = $n.ast;}
+ 		;
  // Lexical Specification of this Programming Language
  //  - lexical specification rules start with uppercase
  

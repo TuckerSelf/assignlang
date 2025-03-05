@@ -13,6 +13,7 @@ import arithlang.AST.PowExp;
 import arithlang.AST.Program;
 import arithlang.AST.SubExp;
 import arithlang.AST.VarExp;
+import arithlang.AST.AsgExp;
 
 public class Printer {
 	public void print(Value v) {
@@ -76,6 +77,21 @@ public class Printer {
 
 		public String visit(AST.VarExp e, Env env) {
 			return "" + e.name();
+		}
+
+		public String visit(AST.AsgExp e, Env env) {
+			String result = "(let (";
+			List<String> names = e.names();
+			List<AST.Exp> value_exps = e.value_exps();
+			int num_decls = names.size();
+			for (int i = 0; i < num_decls ; i++) {
+				result += " (";
+				result += names.get(i) + " ";
+				result += value_exps.get(i).accept(this, env) + ")";
+			}
+			result += ") ";
+			result += e.body().accept(this, env) + " ";
+			return result + ")";
 		}
 	}
 }

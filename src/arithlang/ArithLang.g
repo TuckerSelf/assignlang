@@ -46,7 +46,7 @@ grammar ArithLang;
 			| p=powexp { $ast = $p.ast; }
 			| neg=negexp { $ast = $neg.ast; }
 			| v=varexp { $ast = $v.ast; }
-			| l=asgexp { $ast = $l.ast; }
+			| ag=asgexp { $ast = $ag.ast; }
         ;
  
  // The actions { $ast = $n.ast; } means that this rule passed through 
@@ -155,12 +155,14 @@ grammar ArithLang;
  		id=Identifier { $ast = new VarExp($id.text); }
  		;
 
- asgexp  returns [AsgExp ast] :
-	l=varexp '=' r=asgexp{
-		($l.ast);
-		($r.ast);
-		{$ast = new AsgExp();}
-	}
+ asgexp  returns [AsgExp ast]
+ 		locals [ArrayList<String> names, ArrayList<Exp> value_exps]
+ 			@init { $names = new ArrayList<String>(); $value_exps = new ArrayList<Exp>(); } :
+	l=varexp '=' r=asgexp {
+							$names.add($l.text); 
+							$value_exps.add($r.ast);
+							$ast = new AsgExp();
+						}
 	| n=exp {$ast = $n.ast;}
  		;
  // Lexical Specification of this Programming Language

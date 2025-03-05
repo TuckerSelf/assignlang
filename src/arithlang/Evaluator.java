@@ -2,6 +2,7 @@ package arithlang;
 import static arithlang.AST.*;
 import static arithlang.Value.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import arithlang.AST.AddExp;
@@ -14,7 +15,9 @@ import arithlang.AST.PowExp;
 import arithlang.AST.Program;
 import arithlang.AST.SubExp;
 import arithlang.AST.VarExp;
+import arithlang.AST.AsgExp;
 import arithlang.AST.Visitor;
+import arithlang.Env.ExtendEnv;
 import arithlang.Value.NumVal;
 
 public class Evaluator implements Visitor<Value> {
@@ -104,6 +107,22 @@ public class Evaluator implements Visitor<Value> {
 	public Value visit(VarExp e, Env env) {
 		// Previously, all variables had value 42. New semantics.
 		return env.get(e.name());
+	}
+
+	@Override
+	public Value visit(AsgExp e, Env env) { // New for varlang.
+		List<String> names = e.names();
+		List<Exp> value_exps = e.value_exps();
+		List<Value> values = new ArrayList<Value>(value_exps.size());
+		
+		for(Exp exp : value_exps) 
+			values.add((Value)exp.accept(this, env));
+		
+		Env new_env = env;
+		for (int index = 0; index < names.size(); index++)
+			new_env = new ExtendEnv(new_env, names.get(index), values.get(index));
+
+		return (Value) e.body().accept(this, new_env);		
 	}
 
 }

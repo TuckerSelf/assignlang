@@ -1,4 +1,4 @@
-Program ::= Exp
+Program ::= Asg
 
 Asg     ::= Var = Asg
             | Exp

@@ -142,25 +142,30 @@ public interface AST {
 	}
 
 	public static class AsgExp extends Exp {
-		List<String> _names;
-		List<Exp> _value_exps; 
-		Exp _body;
+		String _name;
+		Exp _value_exp; 
 		
-		public AsgExp(List<String> names, List<Exp> value_exps, Exp body) {
-			_names = names;
-			_value_exps = value_exps;
-			_body = body;
+		public AsgExp(String name, Exp value_exp) {
+			_name = name;
+			_value_exp = value_exp;
 		}
 		
 		public <T> T accept(Visitor<T> visitor, Env env) {
 			return visitor.visit(this, env);
 		}
 		
-		public List<String> names() { return _names; }
+		public String name() { return _name; }
 		
-		public List<Exp> value_exps() { return _value_exps; }
+		public Exp value_exp() { return _value_exp; }
+	}
 
-		public Exp body() { return _body; }
+	public static class UnitExp extends Exp {
+		
+		public UnitExp() {}
+
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
 
 	}
 		
@@ -175,6 +180,7 @@ public interface AST {
 		public T visit(AST.NegExp e, Env env);
 		public T visit(AST.Program p, Env env);
 		public T visit(AST.VarExp e, Env env);
-		public T visit(AST.AsgExp e, Env env);
+		public T visit(AST.AsgExp d, Env env);
+		public T visit(AST.UnitExp e, Env env);
 	}	
 }

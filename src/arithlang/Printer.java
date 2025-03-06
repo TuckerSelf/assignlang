@@ -79,19 +79,16 @@ public class Printer {
 			return "" + e.name();
 		}
 
-		public String visit(AST.AsgExp e, Env env) {
-			String result = "(let (";
-			List<String> names = e.names();
-			List<AST.Exp> value_exps = e.value_exps();
-			int num_decls = names.size();
-			for (int i = 0; i < num_decls ; i++) {
-				result += " (";
-				result += names.get(i) + " ";
-				result += value_exps.get(i).accept(this, env) + ")";
-			}
-			result += ") ";
-			result += e.body().accept(this, env) + " ";
+		public String visit(AST.AsgExp d, Env env) {
+			String result = "(define ";
+			result += d.name() + " ";
+			result += d.value_exp().accept(this, env);
 			return result + ")";
+		}
+
+		@Override
+		public String visit(UnitExp e, Env env) {
+			return "unit";
 		}
 	}
 }

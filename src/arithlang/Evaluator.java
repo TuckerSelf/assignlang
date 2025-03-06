@@ -14,13 +14,18 @@ import arithlang.AST.NumExp;
 import arithlang.AST.PowExp;
 import arithlang.AST.Program;
 import arithlang.AST.SubExp;
+import arithlang.AST.UnitExp;
 import arithlang.AST.VarExp;
 import arithlang.AST.AsgExp;
 import arithlang.AST.Visitor;
 import arithlang.Env.ExtendEnv;
+import arithlang.Env.GlobalEnv;
 import arithlang.Value.NumVal;
+import arithlang.Value.UnitVal;
 
 public class Evaluator implements Visitor<Value> {
+
+	Env initEnv = new GlobalEnv();
 	
 	Printer.Formatter ts = new Printer.Formatter();
 	
@@ -110,19 +115,17 @@ public class Evaluator implements Visitor<Value> {
 	}
 
 	@Override
-	public Value visit(AsgExp e, Env env) { // New for varlang.
-		List<String> names = e.names();
-		List<Exp> value_exps = e.value_exps();
-		List<Value> values = new ArrayList<Value>(value_exps.size());
-		
-		for(Exp exp : value_exps) 
-			values.add((Value)exp.accept(this, env));
-		
-		Env new_env = env;
-		for (int index = 0; index < names.size(); index++)
-			new_env = new ExtendEnv(new_env, names.get(index), values.get(index));
+	public Value visit(AsgExp d, Env env) { // New for definelang.
+		String name = d.name();
+		Exp value_exp = d.value_exp();
+		Value value = (Value) value_exp.accept(this, env);
+		((GlobalEnv) initEnv).extend(name, value);
+		return new Value.UnitVal();
+	}
 
-		return (Value) e.body().accept(this, new_env);		
+	@Override
+	public Value visit(UnitExp e, Env env) {
+		return new UnitVal();
 	}
 
 }

@@ -12,4 +12,8 @@ public interface Value {
 	    	return "" + _val; 
 	    }
 	}
+	static class UnitVal implements Value {
+		public static final UnitVal v = new UnitVal();
+	    public String toString() { return "unit"; }
+	}
 }

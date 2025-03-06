@@ -24,7 +24,7 @@ grammar ArithLang;
 // the language was the input. For instance, in the rule above when the parser
 // is successful in demonstrating that it has parsed an expression, the action
 // "{ $ast = new Program($e.ast); } runs that creates a new object Program 
-// using the object produced by the rule for non-terminal "e".
+// using the object produced by the rule for non-terminal "e"."
 //
 
 

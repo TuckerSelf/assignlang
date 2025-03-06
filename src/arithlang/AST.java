@@ -176,7 +176,7 @@ public interface AST {
 		public T visit(AST.SubExp e, Env env);
 		public T visit(AST.MultExp e, Env env);
 		public T visit(AST.DivExp e, Env env);
-		public T visit(AST.PowExp e, Env env);
+		public T visit(AST.PowExp p, Env env);
 		public T visit(AST.NegExp e, Env env);
 		public T visit(AST.Program p, Env env);
 		public T visit(AST.VarExp e, Env env);

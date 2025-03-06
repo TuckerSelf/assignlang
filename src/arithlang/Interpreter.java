@@ -24,6 +24,8 @@ public class Interpreter {
 				if(p._e == null) continue REPL;
 				Value val = eval.valueOf(p);
 				printer.print(val);
+			} catch (Env.LookupException e) {
+				printer.print(e);
 			} catch (IOException e) {
 				System.out.println("Error reading input:" + e.getMessage());
 			} catch (NullPointerException e) {

@@ -12,7 +12,6 @@ exp returns [Exp ast]:
         | d=divexp { $ast = $d.ast; }
 	| p=powexp { $ast = $p.ast; }
 	| neg=negexp { $ast = $neg.ast; }
-	| v=varexp { $ast = $v.ast; }
 	| a=asgexp { $ast = $a.ast; }
         ;
 
@@ -90,9 +89,6 @@ negexp returns [NegExp ast]:
 		'(' '-' e=exp ')' { $ast=new NegExp($e.ast); }
 		;
 
-varexp returns [VarExp ast]: 
- 		id=Identifier { $ast = new VarExp($id.text); }
- 		;
 Dot : '.' ;
 
 Number : DIGIT+ ;

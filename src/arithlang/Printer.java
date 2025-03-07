@@ -75,10 +75,6 @@ public class Printer {
 			return result + ")";
 		}
 
-		public String visit(AST.VarExp e, Env env) {
-			return "" + e.name();
-		}
-
 		public String visit(AST.AsgExp d, Env env) {
 			String result = "(define ";
 			result += d.name() + " ";

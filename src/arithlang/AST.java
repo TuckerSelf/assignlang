@@ -43,22 +43,6 @@ public interface AST {
 
 	}
 
-	public static class VarExp extends Exp {
-		String _name;
-
-		public VarExp(String name) {
-			_name = name;
-		}
-
-		public String name() {
-			return _name;
-		}
-		
-		public <T> T accept(Visitor<T> visitor, Env env) {
-			return visitor.visit(this, env);
-		}
-	}
-
 	public static class NumExp extends Exp {
 		double _val;
 
@@ -287,7 +271,6 @@ public interface AST {
 		public T visit(AST.PowExp p, Env env);
 		public T visit(AST.NegExp e, Env env);
 		public T visit(AST.Program p, Env env);
-		public T visit(AST.VarExp e, Env env);
 		public T visit(AST.AsgExp d, Env env);
 		public T visit(AST.UnitExp e, Env env);
 	}	

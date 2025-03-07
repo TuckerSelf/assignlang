@@ -1,6 +1,8 @@
 package arithlang;
 import java.io.IOException;
 import arithlang.AST.*;
+import arithlang.Env;
+import arithlang.Value;
 
 /**
  * This main class implements the Read-Eval-Print-Loop of the interpreter with
@@ -12,7 +14,8 @@ import arithlang.AST.*;
 public class Interpreter {
 	public static void main(String[] args) {
 		System.out.println("Type a program to evaluate and press the enter key," + 
-							" e.g. (+ (* 3 100) (/ 84 (- 279 277))) \n" + 
+							" e.g. (define result (let ((a 3) (b 100) (c 84) (d 279) (e 277)) (+ (* a b) (/ c (- d e))))) result \n" + 
+							" or (define a 3) (define b 100) (define c 84) (define d 279) (define e 277) (+ (* a b) (/ c (- d e))) \n" +
 							"Press Ctrl + C to exit.");
 		Reader reader = new Reader();
 		Evaluator eval = new Evaluator();
@@ -22,7 +25,7 @@ public class Interpreter {
 			try {
 				p = reader.read();
 				if(p._e == null) continue REPL;
-				Value val = eval.valueOf(p);
+				Value val = eval.valueOf(p, null);
 				printer.print(val);
 			} catch (Env.LookupException e) {
 				printer.print(e);

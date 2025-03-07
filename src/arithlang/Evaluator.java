@@ -19,8 +19,6 @@ import arithlang.AST.UnitExp;
 import arithlang.AST.VarExp;
 import arithlang.AST.AsgExp;
 import arithlang.AST.Visitor;
-import arithlang.Env.ExtendEnv;
-import arithlang.Env.GlobalEnv;
 import arithlang.Value.NumVal;
 import arithlang.Value.UnitVal;
 

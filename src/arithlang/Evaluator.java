@@ -16,7 +16,6 @@ import arithlang.AST.PowExp;
 import arithlang.AST.Program;
 import arithlang.AST.SubExp;
 import arithlang.AST.UnitExp;
-import arithlang.AST.VarExp;
 import arithlang.AST.AsgExp;
 import arithlang.AST.Visitor;
 import arithlang.Value.NumVal;
@@ -107,12 +106,6 @@ public class Evaluator implements Visitor<Value> {
 			result = result - rVal.v();
 		}
 		return new NumVal(result);
-	}
-
-	@Override
-	public Value visit(VarExp e, Env env) {
-		// Previously, all variables had value 42. New semantics.
-		return env.get(e.name());
 	}
 
 	@Override

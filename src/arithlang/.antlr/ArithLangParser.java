@@ -174,7 +174,7 @@ public class ArithLangParser extends Parser {
 		public AsgExp ast;
 		public VarexpContext l;
 		public AsgexpContext r;
-		public ExpContext n;
+		public ExpContext e;
 		public VarexpContext varexp() {
 			return getRuleContext(VarexpContext.class,0);
 		}
@@ -215,8 +215,8 @@ public class ArithLangParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(42);
-				((AsgexpContext)_localctx).n = exp();
-				((AsgexpContext)_localctx).ast =  ((AsgexpContext)_localctx).n.ast;
+				((AsgexpContext)_localctx).e = exp();
+				((AsgexpContext)_localctx).ast =  ((AsgexpContext)_localctx).e.ast;
 				}
 				break;
 			}

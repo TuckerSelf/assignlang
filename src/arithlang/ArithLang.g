@@ -35,7 +35,7 @@ asgexp  returns [AsgExp ast] :
 	l=varexp '=' r=asgexp {
 							$ast = new AsgExp($l.text, $r.ast);
 						}
-	| n=exp {$ast = $n.ast;}
+	| e=exp {$ast = $e.ast;}
  		;
 // The following is another example of a production rule in its simplified form.
 // exp : 

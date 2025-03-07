@@ -24,6 +24,8 @@ import arithlang.Env.GlobalEnv;
 import arithlang.Value.NumVal;
 import arithlang.Value.UnitVal;
 
+import arithlang.Env.*;
+
 public class Evaluator implements Visitor<Value> {
 
 	Env initEnv = new GlobalEnv();

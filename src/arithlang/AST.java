@@ -19,13 +19,13 @@ public interface AST {
 		public abstract <T> T accept(Visitor<T> visitor, Env env);
 	}
 	public static class Program extends ASTNode {
-		Exp _e;
+		AsgExp _e;
 
-		public Program(Exp e) {
+		public Program(AsgExp e) {
 			_e = e;
 		}
 
-		public Exp e() {
+		public AsgExp e() {
 			return _e;
 		}
 		

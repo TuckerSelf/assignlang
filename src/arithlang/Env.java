@@ -1,7 +1,8 @@
 package arithlang;
 
 public interface Env {
-    Value get (String search_var);
+	Value get (String search_var);
+	void set (String search_var, Value val);
 
 	@SuppressWarnings("serial")
 	static public class LookupException extends RuntimeException {
@@ -12,6 +13,9 @@ public interface Env {
 	
 	static public class EmptyEnv implements Env {
 		public Value get (String search_var) {
+			throw new LookupException("No binding found for name: " + search_var);
+		}
+		public void set (String search_var, Value val) {
 			throw new LookupException("No binding found for name: " + search_var);
 		}
 	}
@@ -30,6 +34,13 @@ public interface Env {
 				return _val;
 			return _saved_env.get(search_var);
 		}
+
+		public synchronized void set (String search_var, Value val) {
+			if (search_var.equals(_var))
+				_val = val;
+			else
+				_saved_env.set(search_var, val);
+		}
 	}
 	
 	static public class GlobalEnv implements Env {
@@ -44,6 +55,12 @@ public interface Env {
 		}
 		public synchronized void extend (String var, Value val) {
 			map.put(var, val);
+		}
+		public void set (String search_var, Value val) {
+			if(map.containsKey(search_var))
+				map.put(search_var, val);
+			else
+				throw new LookupException("No binding found for name: " + search_var);
 		}
 	}
 }

@@ -14,6 +14,7 @@ import arithlang.AST.Program;
 import arithlang.AST.SubExp;
 import arithlang.AST.VarExp;
 import arithlang.AST.AsgExp;
+import arithlang.AST.UnitExp;
 
 public class Printer {
 	public void print(Value v) {

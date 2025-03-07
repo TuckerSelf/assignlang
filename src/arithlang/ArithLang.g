@@ -10,9 +10,12 @@ grammar ArithLang;
  //
  // The rule above in its full form, where actions enclosed in { }
  // are used to construct abstract syntax tree (AST) nodes. 
- program returns [Program ast] :   
-		e=exp { $ast = new Program($e.ast); }
-		;
+ program returns [Program ast]
+         locals [ArrayList<AsgExp> asgs, Exp expr]
+         @init { $asgs = new ArrayList<AsgExp>(); $expr = new UnitExp(); } :
+        (a=asgexp { $asgs.add($a.ast); } )* (e=exp { $expr = $e.ast; } )? 
+        { $ast = new Program($asgs, $expr); }
+        ;
 //
 // In the rule above, the form "returns [Program ast]" says that this 
 // rule produces an object of type Program and other rules can access that 
@@ -30,9 +33,7 @@ grammar ArithLang;
 
 asgexp  returns [AsgExp ast] :
 	l=varexp '=' r=asgexp {
-							names.add($l.text); 
-							value_exps.add($r.ast);
-							$ast = new AsgExp();
+							$ast = new AsgExp($l.text, $r.ast);
 						}
 	| n=exp {$ast = $n.ast;}
  		;

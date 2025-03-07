@@ -32,7 +32,7 @@ grammar ArithLang;
 
 
 asgexp  returns [AsgExp ast] :
-	l=varexp '=' r=asgexp {
+	l=Identifier '=' r=asgexp {
 							$ast = new AsgExp($l.text, $r.ast);
 						}
 	| e=exp {$ast = $e.ast;}

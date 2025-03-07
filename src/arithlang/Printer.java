@@ -12,7 +12,6 @@ import arithlang.AST.NumExp;
 import arithlang.AST.PowExp;
 import arithlang.AST.Program;
 import arithlang.AST.SubExp;
-import arithlang.AST.VarExp;
 import arithlang.AST.AsgExp;
 import arithlang.AST.UnitExp;
 
